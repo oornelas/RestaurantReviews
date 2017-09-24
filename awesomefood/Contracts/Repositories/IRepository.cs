@@ -7,10 +7,10 @@ namespace AwesomeFood.Contracts.Repositories
 {
     public interface IRepository<T> where T : IEntity
     {
-        T Get(Guid Id);
+        T Get(Guid id);
         IEnumerable<T> Query(IQueryParameters<T> parameters);
         void Save(T entity);
-        void Delete(Guid Id);
+        void Delete(Guid id);
     }
     
 }

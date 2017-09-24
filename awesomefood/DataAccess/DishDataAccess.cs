@@ -35,6 +35,11 @@ namespace AwesomeFood.DataAccess
 
         public void SaveDish(IDish dish)
         {
+            if (dish == null)
+            {
+                throw new ArgumentNullException(nameof(dish));
+            }
+
             _dishRepository.Save(dish);
         }
     }

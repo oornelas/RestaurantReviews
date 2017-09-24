@@ -8,5 +8,6 @@ namespace AwesomeFood.Contracts.Entities
         Guid UserId { get; set; }
         AuthenticationType AuthenticationType { get; set; }
         string AuthenticationToken { get; set; }
+        DateTime ExpirationDate { get; set; }
     }
 }

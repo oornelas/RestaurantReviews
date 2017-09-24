@@ -33,6 +33,11 @@ namespace AwesomeFood.DataAccess
 
         public void SaveUser(IUser user)
         {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
             _userRepository.Save(user);
         }
     }
