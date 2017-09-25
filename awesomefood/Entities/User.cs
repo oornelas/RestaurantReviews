@@ -5,7 +5,7 @@ namespace AwesomeFood.Entities
 {
     public class User : IUser
     {
-        public Guid Id { get; set; }
+        public Guid id { get; set; }
         public string Email { get; set; }
         public string DisplayName { get; set; }
         public string FirstName { get; set; }

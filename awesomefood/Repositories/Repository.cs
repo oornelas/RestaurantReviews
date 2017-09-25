@@ -6,13 +6,13 @@ using AwesomeFood.Contracts.Entities;
 using AwesomeFood.Contracts.Repositories;
 using AwesomeFood.Repositories;
 
-namespace Repositories.InMemory
+namespace Repositories
 {
-    public class Repository<T> : IRepository<T> where T: IEntity
+    public class InMemoryRepository<T> : IRepository<T> where T: IEntity
     {
         protected readonly Dictionary<Guid, T> _entityDictionary;
 
-        public Repository()
+        public InMemoryRepository()
         {
             _entityDictionary = new Dictionary<Guid,T>();
         }
@@ -49,13 +49,13 @@ namespace Repositories.InMemory
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            if (_entityDictionary.ContainsKey(entity.Id))
+            if (_entityDictionary.ContainsKey(entity.id))
             {
-                _entityDictionary[entity.Id] = entity;
+                _entityDictionary[entity.id] = entity;
             }
             else
             {
-                _entityDictionary.Add(entity.Id, entity);
+                _entityDictionary.Add(entity.id, entity);
             }
         }
     }

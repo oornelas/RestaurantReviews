@@ -5,7 +5,7 @@ namespace AwesomeFood.Entities
 {
     public class Restaurant : IRestaurant
     {
-        public Guid Id { get; set; }
+        public Guid id { get; set; }
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Website { get; set; }

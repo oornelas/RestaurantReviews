@@ -5,7 +5,7 @@ namespace AwesomeFood.Entities
 {
     public class DishReview : IDishReview
     {
-        public Guid Id { get; set; }
+        public Guid id { get; set; }
         public Guid DishId { get; set; }
         public Guid UserId { get; set; }
         public byte AwesomenessLevel { get; set; }

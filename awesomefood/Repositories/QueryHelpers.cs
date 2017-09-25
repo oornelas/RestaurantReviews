@@ -34,11 +34,11 @@ namespace AwesomeFood.Repositories
             {
                 if (orderByParameters.OrderByDirection == OrderByDirection.Ascending)
                 {
-                    query = query.OrderBy(user => orderByParameters.OrderBy(user));
+                    query = query.OrderBy(x => orderByParameters.OrderBy(x));
                 }
                 else
                 {
-                    query = query.OrderByDescending(user => orderByParameters.OrderBy(user));
+                    query = query.OrderByDescending(x => orderByParameters.OrderBy(x));
                 }
             }
 

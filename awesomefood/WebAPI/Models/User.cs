@@ -12,12 +12,12 @@ namespace AwesomeFood.WebAPI.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public User MapFromEntity(IUser user)
+        public static User MapFromEntity(IUser user)
         {
             if (user == null) return null;
 
             return new User() {
-                Id = user.Id,
+                Id = user.id,
                 Email = user.Email,
                 DisplayName = user.DisplayName,
                 FirstName = user.FirstName,
@@ -25,12 +25,12 @@ namespace AwesomeFood.WebAPI.Models
             };
         }
 
-        public IUser MapToEntity(User user)
+        public static IUser MapToEntity(User user)
         {
             if (user == null) return null;
             
             return new AwesomeFood.Entities.User() {
-                Id = user.Id,
+                id = user.Id,
                 Email = user.Email,
                 DisplayName = user.DisplayName,
                 FirstName = user.FirstName,

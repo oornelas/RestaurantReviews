@@ -21,7 +21,7 @@ namespace AwesomeFood.DataAccess
         {
             var queryParams = new QueryParameters<IUserCredentials>()
             {
-                Filter = (user) => user.Id == userId && user.AuthenticationType == authenticationType
+                Filter = (user) => user.id == userId && user.AuthenticationType == authenticationType
             };
 
             return _credentialsRepository.Query(queryParams).First();

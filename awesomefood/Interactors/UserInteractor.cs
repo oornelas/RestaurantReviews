@@ -27,13 +27,13 @@ namespace AwesomeFood.Interactors
                 throw new ArgumentNullException(nameof(user));
             }
 
-            user.Id = Guid.NewGuid();
+            user.id = Guid.NewGuid();
             user.CreatedOn = DateTime.UtcNow;
             user.ModifiedOn = DateTime.UtcNow;
             
             _userDataAccess.SaveUser(user);
 
-            return user.Id;
+            return user.id;
         }
 
         public IUser GetUser(Guid userId)
@@ -55,7 +55,7 @@ namespace AwesomeFood.Interactors
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var existingUser = GetUser(user.Id);
+            var existingUser = GetUser(user.id);
 
             UpdateUserFields(existingUser, user);
 
