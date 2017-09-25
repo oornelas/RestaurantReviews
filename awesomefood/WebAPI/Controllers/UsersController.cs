@@ -31,7 +31,7 @@ namespace AwesomeFood.WebAPI.Controllers
             {
                 return new ObjectResult(Models.User.MapFromEntity(_userInteractor.GetUser(id)));
             }
-            catch(UserNotFoundException)
+            catch(EntityNotFoundException)
             {
                 return new NotFoundResult();
             }
@@ -56,7 +56,7 @@ namespace AwesomeFood.WebAPI.Controllers
                 _userInteractor.UpdateUser(Models.User.MapToEntity(user));
                 return new OkResult();
             }
-            catch(UserNotFoundException)
+            catch(EntityNotFoundException)
             {
                 return new NotFoundResult();
             }

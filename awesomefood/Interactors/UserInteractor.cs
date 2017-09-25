@@ -42,7 +42,7 @@ namespace AwesomeFood.Interactors
 
             if (user == null)
             {
-                throw new UserNotFoundException(userId);
+                throw new EntityNotFoundException(userId);
             }
 
             return user;
