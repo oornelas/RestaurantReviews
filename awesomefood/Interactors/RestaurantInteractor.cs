@@ -85,6 +85,7 @@ namespace AwesomeFood.Interactors
            existingRestaurant.Email = restaurant.Email;
            existingRestaurant.Hours = restaurant.Hours;
            existingRestaurant.ModifiedByUserId = restaurant.ModifiedByUserId;
+           existingRestaurant.ModifiedOn = DateTime.UtcNow;
            existingRestaurant.Name = restaurant.Name;
            existingRestaurant.Phone = restaurant.Phone;
            existingRestaurant.State = restaurant.State;

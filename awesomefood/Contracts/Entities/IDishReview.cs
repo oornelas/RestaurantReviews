@@ -6,5 +6,6 @@ namespace AwesomeFood.Contracts.Entities
     {
         Guid DishId { get; set; }
         byte AwesomenessLevel { get; set; }
+        string Review { get; set; }
     }    
 }

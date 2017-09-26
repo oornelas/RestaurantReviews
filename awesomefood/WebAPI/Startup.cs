@@ -42,14 +42,18 @@ namespace AwesomeFood.WebAPI
                         (provider => new DocumentDBRepository<IUser,User>(endpoint, key, databaseId));
             services.AddSingleton<IRepository<IRestaurant>,DocumentDBRepository<IRestaurant, Restaurant>>
                         (provider => new DocumentDBRepository<IRestaurant,Restaurant>(endpoint, key, databaseId));
+            services.AddSingleton<IRepository<IDish>,DocumentDBRepository<IDish, Dish>>
+                        (provider => new DocumentDBRepository<IDish,Dish>(endpoint, key, databaseId));
 
             //DataAccess
             services.AddScoped<IUserDataAccess,UserDataAccess>();
             services.AddScoped<IRestaurantDataAccess,RestaurantDataAccess>();
+            services.AddScoped<IDishDataAccess,DishDataAccess>();
 
             //Interactors
             services.AddScoped<IUserInteractor,UserInteractor>();
             services.AddScoped<IRestaurantInteractor,RestaurantInteractor>();
+            services.AddScoped<IDishInteractor,DishInteractor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
