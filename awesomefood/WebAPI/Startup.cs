@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace AwesomeFood.WebAPI
 {
@@ -44,16 +45,26 @@ namespace AwesomeFood.WebAPI
                         (provider => new DocumentDBRepository<IRestaurant,Restaurant>(endpoint, key, databaseId));
             services.AddSingleton<IRepository<IDish>,DocumentDBRepository<IDish, Dish>>
                         (provider => new DocumentDBRepository<IDish,Dish>(endpoint, key, databaseId));
+            services.AddSingleton<IRepository<IDishReview>,DocumentDBRepository<IDishReview, DishReview>>
+                        (provider => new DocumentDBRepository<IDishReview,DishReview>(endpoint, key, databaseId));
 
             //DataAccess
             services.AddScoped<IUserDataAccess,UserDataAccess>();
             services.AddScoped<IRestaurantDataAccess,RestaurantDataAccess>();
             services.AddScoped<IDishDataAccess,DishDataAccess>();
+            services.AddScoped<IDishReviewDataAccess,DishReviewDataAccess>();
 
             //Interactors
             services.AddScoped<IUserInteractor,UserInteractor>();
             services.AddScoped<IRestaurantInteractor,RestaurantInteractor>();
             services.AddScoped<IDishInteractor,DishInteractor>();
+            services.AddScoped<IDishReviewInteractor,DishReviewInteractor>();
+
+            // Register the Swagger generator, defining one or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "AwesomeFood API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +74,15 @@ namespace AwesomeFood.WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AwesomeFood API V1");
+            });
 
             app.UseMvc();
         }

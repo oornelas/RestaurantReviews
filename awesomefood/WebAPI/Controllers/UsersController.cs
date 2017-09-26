@@ -15,11 +15,17 @@ namespace AwesomeFood.WebAPI.Controllers
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
+        private static IRestaurantInteractor _restaurantInteractor;
+        private static IDishInteractor _dishInteractor;
         private static IUserInteractor _userInteractor;
+        private static IDishReviewInteractor _dishReviewInteractor;
 
-        public UsersController(IUserInteractor userInteractor)
+        public UsersController(IRestaurantInteractor restaurantInteractor, IDishInteractor dishInteractor, IUserInteractor userInteractor, IDishReviewInteractor dishReviewInteractor)
         {
+            _restaurantInteractor = restaurantInteractor;
+            _dishInteractor = dishInteractor;
             _userInteractor = userInteractor;
+            _dishReviewInteractor = dishReviewInteractor;
         }
 
         // GET api/users/5f965c3c-6f8c-4729-b969-cc79c77f90b8
@@ -53,6 +59,53 @@ namespace AwesomeFood.WebAPI.Controllers
             {
                 user.Id = id;
                 _userInteractor.UpdateUser(Models.User.MapToEntity(user));
+                return new OkResult();
+            }
+            catch(EntityNotFoundException)
+            {
+                return new NotFoundResult();
+            }
+        }
+
+        // GET api/users/5f965c3c-6f8c-4729-b969-cc79c77f90b8/reviews/5f965c3c-6f8c-4729-b969-cc79c77f90b8
+        [HttpGet("{userId}/reviews/{dishReviewId}")]
+        public IActionResult GetDishReview(Guid userId, Guid dishReviewId)
+        {
+            try 
+            {
+                var review = Models.DishReview.MapFromEntity(_dishReviewInteractor.GetDishReview(dishReviewId));
+                review.Dish = Models.Dish.MapFromEntity(_dishInteractor.GetDish(review.DishId));
+                review.Restaurant = Models.Restaurant.MapFromEntity(_restaurantInteractor.GetRestaurant(review.Dish.RestaurantId));
+                return new ObjectResult(review);
+            }
+            catch(EntityNotFoundException)
+            {
+                return new NotFoundResult();
+            }
+        }
+
+        // GET api/users/5f965c3c-6f8c-4729-b969-cc79c77f90b8/reviews
+        [HttpGet("{userId}/reviews")]
+        public IActionResult GetDishReviews(Guid userId)
+        {
+            try 
+            {
+                //TODO: Put max results in config
+                return new ObjectResult(_dishReviewInteractor.ListDishReviewsByUser(userId,100).Select(r => Models.DishReview.MapFromEntity(r)));
+            }
+            catch(EntityNotFoundException)
+            {
+                return new NotFoundResult();
+            }
+        }
+
+        // DELETE api/users/5f965c3c-6f8c-4729-b969-cc79c77f90b8/reviews/5f965c3c-6f8c-4729-b969-cc79c77f90b8
+        [HttpDelete("{userId}/reviews/{dishReviewId}")]
+        public IActionResult DeleteDishReview(Guid userId, Guid dishReviewId)
+        {
+            try 
+            {
+                _dishReviewInteractor.DeleteDishReview(dishReviewId);
                 return new OkResult();
             }
             catch(EntityNotFoundException)

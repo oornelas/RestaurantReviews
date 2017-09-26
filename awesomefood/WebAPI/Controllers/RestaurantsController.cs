@@ -17,11 +17,13 @@ namespace AwesomeFood.WebAPI.Controllers
     {
         private static IRestaurantInteractor _restaurantInteractor;
         private static IDishInteractor _dishInteractor;
+        private static IDishReviewInteractor _dishReviewInteractor;
 
-        public RestaurantsController(IRestaurantInteractor restaurantInteractor, IDishInteractor dishInteractor)
+        public RestaurantsController(IRestaurantInteractor restaurantInteractor, IDishInteractor dishInteractor, IDishReviewInteractor dishReviewInteractor)
         {
             _restaurantInteractor = restaurantInteractor;
             _dishInteractor = dishInteractor;
+            _dishReviewInteractor = dishReviewInteractor;
         }
 
         // GET api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8
@@ -149,6 +151,80 @@ namespace AwesomeFood.WebAPI.Controllers
             var dishId = _dishInteractor.CreateDish(Models.Dish.MapToEntity(dish));
             dish.Id = dishId;
             return CreatedAtRoute("GetDish", new { restaurantId, dishId }, dish);
+        }
+
+        // GET api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8/reviews
+        [HttpGet("{restaurantId}/dishes/{dishId}/reviews")]
+        public IActionResult GetDishReviews(Guid restaurantId, Guid dishId)
+        {
+            try 
+            {
+                //TODO: Put max results in config
+                return new ObjectResult(_dishReviewInteractor.ListDishReviewsByDish(dishId,100).Select(r => Models.DishReview.MapFromEntity(r)));
+            }
+            catch(EntityNotFoundException)
+            {
+                return new NotFoundResult();
+            }
+        }
+
+        // GET api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8/reviews/5f965c3c-6f8c-4729-b969-cc79c77f90b8
+        [HttpGet("{restaurantId}/dishes/{dishId}/reviews/{dishReviewId}", Name = "GetDishReview")]
+        public IActionResult GetDishReview(Guid restaurantId, Guid dishId, Guid dishReviewId)
+        {
+            try 
+            {
+                var review = Models.DishReview.MapFromEntity(_dishReviewInteractor.GetDishReview(dishReviewId));
+                review.Dish = Models.Dish.MapFromEntity(_dishInteractor.GetDish(dishId));
+                review.Restaurant = Models.Restaurant.MapFromEntity(_restaurantInteractor.GetRestaurant(restaurantId));
+                return new ObjectResult(review);
+            }
+            catch(EntityNotFoundException)
+            {
+                return new NotFoundResult();
+            }
+        }
+
+        // POST api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8/reviews
+        [HttpPost("{restaurantId}/dishes/{dishId}/reviews")]
+        public IActionResult PostDishReview(Guid restaurantId, Guid dishId, [FromBody]Models.DishReview dishReview)
+        {
+            dishReview.DishId = dishId;
+            var dishReviewId = _dishReviewInteractor.CreateDishReview(Models.DishReview.MapToEntity(dishReview));
+            dishReview.Id = dishReviewId;
+            return CreatedAtRoute("GetDishReview", new { restaurantId, dishId, dishReviewId }, dishReview);
+        }
+
+        // PUT api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8/reviews/5f965c3c-6f8c-4729-b969-cc79c77f90b8
+        [HttpPut("{restaurantId}/dishes/{dishId}/reviews/{dishReviewId}")]
+        public IActionResult PutDishReview(Guid restaurantId, Guid dishId, Guid dishReviewId, [FromBody]Models.DishReview dishReview)
+        {
+            try 
+            {
+                dishReview.Id = dishReviewId;
+                dishReview.DishId = dishId;
+                _dishReviewInteractor.UpdateDishReview(Models.DishReview.MapToEntity(dishReview));
+                return new OkResult();
+            }
+            catch(EntityNotFoundException)
+            {
+                return new NotFoundResult();
+            }
+        }
+
+        // DELETE api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8/reviews/5f965c3c-6f8c-4729-b969-cc79c77f90b8
+        [HttpDelete("{restaurantId}/dishes/{dishId}/reviews/{dishReviewId}")]
+        public IActionResult DeleteDishReview(Guid restaurantId, Guid dishId, Guid dishReviewId)
+        {
+            try 
+            {
+                _dishReviewInteractor.DeleteDishReview(dishReviewId);
+                return new OkResult();
+            }
+            catch(EntityNotFoundException)
+            {
+                return new NotFoundResult();
+            }
         }
     }
 }
