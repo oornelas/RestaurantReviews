@@ -36,7 +36,7 @@ namespace AwesomeFood.DataAccess
         {
             var queryParams = new QueryParameters<IRestaurant>()
             {
-                Filter = (restaurant) => restaurant.City.ToLower() == city.ToLower()  && restaurant.State.ToLowerInvariant() == state.ToLower(),
+                Filter = (restaurant) => restaurant.City.ToLower() == city.ToLower()  && restaurant.State.ToLower() == state.ToLower(),
                 OrderByParameters = new OrderByParameters<IRestaurant>() { OrderBy = (restaurant) => restaurant.AwesomenessLevel, OrderByDirection = OrderByDirection.Descending },
                 Pagination = new PaginationParameters() { MaximumRecords = maximumResults, Offset = 0 }
             };

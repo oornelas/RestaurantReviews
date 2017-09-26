@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using AwesomeFood.Contracts.Entities;
+using AwesomeFood.Common;
 
 namespace AwesomeFood.Entities
 {
@@ -10,8 +12,8 @@ namespace AwesomeFood.Entities
         public string Phone { get; set; }
         public string Website { get; set; }
         public string Email { get; set; }
-        public IHours Hours { get; set; }
-        public TimeZoneInfo TimeZone { get; set; }
+        public IEnumerable<Common.Hours> Hours { get; set; }
+        public string TimeZone { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public string City { get; set; }

@@ -19,7 +19,6 @@ namespace AwesomeFood.WebAPI.Controllers
 
         public UsersController(IUserInteractor userInteractor)
         {
-            //TODO: Move to bootstrapper/ioc
             _userInteractor = userInteractor;
         }
 

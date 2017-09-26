@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using AwesomeFood.Common;
 using AwesomeFood.Contracts.Repositories;
 
@@ -8,11 +9,11 @@ namespace AwesomeFood.Repositories
 {
     public static class QueryHelpers
     {
-        public static IEnumerable<T> AddFiltersToQuery<T>(this IEnumerable<T> query, Func<T,bool> filter)
+        public static IEnumerable<T> AddFiltersToQuery<T>(this IEnumerable<T> query, Expression<Func<T,bool>> filter)
         {
             if (filter != null)
             {
-                query = query.Where(e => filter(e));
+                query = query.Where(filter.Compile());
             }
 
             return query;

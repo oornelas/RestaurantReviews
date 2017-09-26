@@ -1,10 +1,11 @@
 using System;
-using AwesomeFood.Common;
 using AwesomeFood.Contracts.Entities;
+using AwesomeFood.Entities;
+using AwesomeFood.Common;
 
-namespace AwesomeFood.Entities
+namespace AwesomeFood.WebAPI.Models
 {
-    public class Hours : IHours
+    public class Hours
     {
         public DayOfWeek DayOfWeek { get; set; }
 

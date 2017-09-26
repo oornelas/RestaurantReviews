@@ -65,13 +65,26 @@ namespace AwesomeFood.Repositories
             }
         }
 
-        private async Task<IEnumerable<T2>> GetItemsAsync(Expression<Func<T2, bool>> predicate)
+        private async Task<IEnumerable<T2>> GetItemsAsync(Expression<Func<T, bool>> predicate = null)
         {
-            IDocumentQuery<T2> query = client.CreateDocumentQuery<T2>(
-                UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
-                new FeedOptions { MaxItemCount = -1 })
-                .Where(predicate)
-                .AsDocumentQuery();
+            IDocumentQuery<T> query;
+
+            if (predicate != null)
+            {
+                    query = client.CreateDocumentQuery<T2>(
+                    UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
+                    new FeedOptions { MaxItemCount = -1 })
+                    .Where(predicate)
+                    .AsDocumentQuery();
+            }
+            else
+            {
+                    query = client.CreateDocumentQuery<T2>(
+                    UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
+                    new FeedOptions { MaxItemCount = -1 })
+                    .Where<T>(x => x.id == x.id)
+                    .AsDocumentQuery();
+            }
 
             List<T2> results = new List<T2>();
             while (query.HasMoreResults)
@@ -141,7 +154,12 @@ namespace AwesomeFood.Repositories
         public IEnumerable<T> Query(IQueryParameters<T> parameters)
         {
             //TODO: Full blown filtering and sorting
-            return GetItemsAsync(p => parameters.Filter(p)).Result;
+            if (parameters != null && parameters.Filter != null)
+            {
+                return GetItemsAsync(parameters.Filter).Result;
+            }
+
+            return GetItemsAsync().Result;
         }
 
         public void Save(T entity)

@@ -45,12 +45,22 @@ namespace AwesomeFood.Interactors
 
         public IEnumerable<IRestaurant> ListRestaurants(int maximumResults)
         {
-            throw new NotImplementedException();
+            return _restaurantDataAccess.ListRestaurants(maximumResults);
         }
 
         public IEnumerable<IRestaurant> ListRestaurantsByCity(string city, string state, int maximumResults)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(city))
+            {
+                throw new ArgumentException("City parameter can't be empty.", nameof(city));
+            }
+
+            if (string.IsNullOrWhiteSpace(state))
+            {
+                throw new ArgumentException("State parameter can't be empty.", nameof(state));
+            }
+
+            return _restaurantDataAccess.ListRestaurantsByCity(city,state,maximumResults);
         }
 
         public void UpdateRestaurant(IRestaurant restaurant)
