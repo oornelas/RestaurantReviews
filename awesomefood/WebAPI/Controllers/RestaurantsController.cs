@@ -58,7 +58,7 @@ namespace AwesomeFood.WebAPI.Controllers
             try 
             {
                 //TODO: Put max results in config
-                return new ObjectResult(_restaurantInteractor.ListRestaurantsByCity(city,state,100).Select(r => Models.Restaurant.MapFromEntity(r)));
+                return new ObjectResult(_restaurantInteractor.ListRestaurantsByCity(city.Replace("-"," "),state.Replace("-"," "),100).Select(r => Models.Restaurant.MapFromEntity(r)));
             }
             catch(EntityNotFoundException)
             {
