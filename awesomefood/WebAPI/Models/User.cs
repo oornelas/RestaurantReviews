@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using AwesomeFood.Contracts.Entities;
 using AwesomeFood.Entities;
 
@@ -7,7 +8,10 @@ namespace AwesomeFood.WebAPI.Models
     public class User
     {
         public Guid Id { get; set; }
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
+        [Required]
         public string DisplayName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

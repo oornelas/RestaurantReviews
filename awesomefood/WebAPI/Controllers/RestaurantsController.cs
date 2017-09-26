@@ -27,7 +27,7 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // GET api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8
-        [HttpGet("{id}", Name = "GetRestaurant")]
+        [HttpGet("{id:guid}", Name = "GetRestaurant")]
         public IActionResult Get(Guid id)
         {
             try 
@@ -56,7 +56,7 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // GET api/restaurants/{state}/{city}
-        [HttpGet("{state}/{city}")]
+        [HttpGet("{state:required}/{city:required}")]
         public IActionResult Get(string state, string city)
         {
             try 
@@ -74,6 +74,11 @@ namespace AwesomeFood.WebAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]Models.Restaurant restaurant)
         {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestResult();
+            }
+
             restaurant.AwesomenessLevel = 0;
             var restaurantId = _restaurantInteractor.CreateRestaurant(Models.Restaurant.MapToEntity(restaurant));
             restaurant.Id = restaurantId;            
@@ -81,9 +86,14 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // PUT api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         public IActionResult Put(Guid id, [FromBody]Models.Restaurant restaurant)
         {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestResult();
+            }
+
             try 
             {
                 restaurant.Id = id;
@@ -97,7 +107,7 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // GET api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes
-        [HttpGet("{restaurantId}/dishes")]
+        [HttpGet("{restaurantId:guid}/dishes")]
         public IActionResult GetDishes(Guid restaurantId)
         {
             try 
@@ -112,7 +122,7 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // GET api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8
-        [HttpGet("{restaurantId}/dishes/{dishId}", Name = "GetDish")]
+        [HttpGet("{restaurantId:guid}/dishes/{dishId:guid}", Name = "GetDish")]
         public IActionResult GetDish(Guid restaurantId, Guid dishId)
         {
             try 
@@ -126,9 +136,14 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // PUT api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8
-        [HttpPut("{restaurantId}/dishes/{dishId}")]
+        [HttpPut("{restaurantId:guid}/dishes/{dishId:guid}")]
         public IActionResult PutDish(Guid restaurantId, Guid dishId, [FromBody]Models.Dish dish)
         {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestResult();
+            }
+
             try 
             {
                 dish.Id = dishId;
@@ -143,9 +158,14 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // POST api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes
-        [HttpPost("{restaurantId}/dishes")]
+        [HttpPost("{restaurantId:guid}/dishes")]
         public IActionResult PostDish(Guid restaurantId, [FromBody]Models.Dish dish)
         {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestResult();
+            }
+
             dish.RestaurantId = restaurantId;
             dish.AwesomenessLevel = 0;
             var dishId = _dishInteractor.CreateDish(Models.Dish.MapToEntity(dish));
@@ -154,7 +174,7 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // GET api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8/reviews
-        [HttpGet("{restaurantId}/dishes/{dishId}/reviews")]
+        [HttpGet("{restaurantId:guid}/dishes/{dishId:guid}/reviews")]
         public IActionResult GetDishReviews(Guid restaurantId, Guid dishId)
         {
             try 
@@ -169,7 +189,7 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // GET api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8/reviews/5f965c3c-6f8c-4729-b969-cc79c77f90b8
-        [HttpGet("{restaurantId}/dishes/{dishId}/reviews/{dishReviewId}", Name = "GetDishReview")]
+        [HttpGet("{restaurantId:guid}/dishes/{dishId:guid}/reviews/{dishReviewId:guid}", Name = "GetDishReview")]
         public IActionResult GetDishReview(Guid restaurantId, Guid dishId, Guid dishReviewId)
         {
             try 
@@ -186,9 +206,14 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // POST api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8/reviews
-        [HttpPost("{restaurantId}/dishes/{dishId}/reviews")]
+        [HttpPost("{restaurantId:guid}/dishes/{dishId:guid}/reviews")]
         public IActionResult PostDishReview(Guid restaurantId, Guid dishId, [FromBody]Models.DishReview dishReview)
         {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestResult();
+            }
+
             dishReview.DishId = dishId;
             var dishReviewId = _dishReviewInteractor.CreateDishReview(Models.DishReview.MapToEntity(dishReview));
             dishReview.Id = dishReviewId;
@@ -196,9 +221,14 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // PUT api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8/reviews/5f965c3c-6f8c-4729-b969-cc79c77f90b8
-        [HttpPut("{restaurantId}/dishes/{dishId}/reviews/{dishReviewId}")]
+        [HttpPut("{restaurantId:guid}/dishes/{dishId:guid}/reviews/{dishReviewId:guid}")]
         public IActionResult PutDishReview(Guid restaurantId, Guid dishId, Guid dishReviewId, [FromBody]Models.DishReview dishReview)
         {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestResult();
+            }
+
             try 
             {
                 dishReview.Id = dishReviewId;
@@ -213,7 +243,7 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // DELETE api/restaurants/5f965c3c-6f8c-4729-b969-cc79c77f90b8/dishes/7f467c8c-Bf4c-4329-b9A9-cc00c77f90b8/reviews/5f965c3c-6f8c-4729-b969-cc79c77f90b8
-        [HttpDelete("{restaurantId}/dishes/{dishId}/reviews/{dishReviewId}")]
+        [HttpDelete("{restaurantId:guid}/dishes/{dishId:guid}/reviews/{dishReviewId:guid}")]
         public IActionResult DeleteDishReview(Guid restaurantId, Guid dishId, Guid dishReviewId)
         {
             try 

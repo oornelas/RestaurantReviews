@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using AwesomeFood.Contracts.Entities;
 using AwesomeFood.Entities;
@@ -10,10 +11,13 @@ namespace AwesomeFood.WebAPI.Models
     {
         public Guid Id { get; set; }
         public Guid RestaurantId { get; set; }
+        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         public byte AwesomenessLevel { get; set; }
+        [Required]
         public Guid CreatedByUserId { get; set; }
+        [Required]
         public Guid ModifiedByUserId { get; set; }
 
         public static Dish MapFromEntity(IDish dish)

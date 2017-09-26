@@ -29,7 +29,7 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // GET api/users/5f965c3c-6f8c-4729-b969-cc79c77f90b8
-        [HttpGet("{id}", Name = "GetUser")]
+        [HttpGet("{id:guid}", Name = "GetUser")]
         public IActionResult Get(Guid id)
         {
             try 
@@ -46,15 +46,25 @@ namespace AwesomeFood.WebAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]Models.User user)
         {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestResult();
+            }
+
             var userId = _userInteractor.CreateUser(Models.User.MapToEntity(user));
             user.Id = userId;
             return CreatedAtRoute("GetUser", new { id = userId }, user);
         }
 
         // PUT api/users/5f965c3c-6f8c-4729-b969-cc79c77f90b8
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         public IActionResult Put(Guid id, [FromBody]Models.User user)
         {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestResult();
+            }
+
             try 
             {
                 user.Id = id;
@@ -68,7 +78,7 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // GET api/users/5f965c3c-6f8c-4729-b969-cc79c77f90b8/reviews/5f965c3c-6f8c-4729-b969-cc79c77f90b8
-        [HttpGet("{userId}/reviews/{dishReviewId}")]
+        [HttpGet("{userId:guid}/reviews/{dishReviewId:guid}")]
         public IActionResult GetDishReview(Guid userId, Guid dishReviewId)
         {
             try 
@@ -85,7 +95,7 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // GET api/users/5f965c3c-6f8c-4729-b969-cc79c77f90b8/reviews
-        [HttpGet("{userId}/reviews")]
+        [HttpGet("{userId:guid}/reviews")]
         public IActionResult GetDishReviews(Guid userId)
         {
             try 
@@ -100,7 +110,7 @@ namespace AwesomeFood.WebAPI.Controllers
         }
 
         // DELETE api/users/5f965c3c-6f8c-4729-b969-cc79c77f90b8/reviews/5f965c3c-6f8c-4729-b969-cc79c77f90b8
-        [HttpDelete("{userId}/reviews/{dishReviewId}")]
+        [HttpDelete("{userId:guid}/reviews/{dishReviewId:guid}")]
         public IActionResult DeleteDishReview(Guid userId, Guid dishReviewId)
         {
             try 
